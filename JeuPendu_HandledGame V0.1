@@ -1,0 +1,464 @@
+/* DOC_STRING DU PROGRAMME
+___FRANCAIS__
+==================================
+Titre       : JeuPendu
+Auteur      : MARRAKCHI Ghassen
+Référence   : ANSI C99
+Type        : Jeu
+Description :
+        - ADMINISTRATEUR : Donne un mot quelconque (Sans espace & pas plus que 19 caractères)
+        - UTILISATEUR    : Essaie de deviner le mot lettre par lettre
+                            avec possibilité de dix echecs
+==================================
+___ENGLISH__
+==================================
+Title       : Hanged Game
+Author      : Ghassen MARRAKCHI
+Reference   : ANSI C99
+Type        : Game
+Description :
+        - ADMINSTRATOR : Gives a letter (whithout space & does not conatain more than 19 character)
+        - USER         : Tries to guess the word letter by letter.
+                             Only ten fails are allowed.
+==================================
+*/
+
+
+
+
+/*INCLUSION DES BIBLIOTHEQUES STANDARDS*/
+/*STANDARD LIBS INCLUSION*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+/*LETTRE DE FRANCAIS CONSTANTES*/
+/*FRENCH CONSTANT LETTERS*/
+#include "constante.h"
+
+/*PROTOTYPES*/
+//Formatage d'une Réponse_ Ansewer Formatting
+int FORMAT(char* chaine);
+//Lecture d'un Caractère_ Character Reading
+char LIRECARACTERE();
+//Importation de Mot à Deviner_ Unknown Word Importation
+char* IMPORTCHAINE();
+//Initialisation d'une Chaine avec le Caractère '*'_ String Initializing with '*' character
+char* INITIALISER(int taille);
+//Verification de l'Appartenance d'une Lettre Dans une Chaine_ verification of a Letter-Belonging into a String
+int VERIFICATION(char *chaine, char caractere, char* chaineInter1, char* chaineInter2, int *cartrouve);
+//Calcul de Score_ Score Calculation
+void CALSCORE(int verif, int* pscore);
+
+
+
+
+/*PROGRAMME PRINCIPAL*/
+/*PRINCIPAL PROGRAM*/
+int main()
+{
+
+    /*DECLARATION DE VARIABLES*/
+    /*VARIABLE DECLARATION*/
+    char caractere;
+    char rep[10];
+    int verif=0;
+
+
+    /*INFORMATION DU PROGRAMME*/
+    /*PROGRAM INFORMATION*/
+    printf("___FRANCAIS__\n");
+    printf("==================================\n");
+    printf("Titre       : JeuPendu\n");
+    printf("Auteur      : MARRAKCHI Ghassen\n");
+    printf("Référence   : ANSI C99\n");
+    printf("Type        : Jeu\n");
+    printf("Description : \n");
+    printf("        - ADMINISTRATEUR : Donne un mot quelconque (Sans espace & pas plus que 19 caractères)\n");
+    printf("        - UTILISATEUR    : Essaie de deviner le mot lettre par lettre\n");
+    printf("                            avec possibilité de dix echecs\n");
+    printf("==================================\n");
+    printf("___ENGLISH__\n");
+    printf("==================================\n");
+    printf("Title       : Hanged Game\n");
+    printf("Author      : Ghassen MARRAKCHI\n");
+    printf("Reference   : ANSI C99\n");
+    printf("Type        : Game\n");
+    printf("Description : \n");
+    printf("        - ADMINSTRATOR : Gives a letter (whithout space & does not caontain more than 19 Character)\n");
+    printf("        - USER         : Tries to guess the word letter by letter.\n");
+    printf("                             Only ten fails are allowed.\n");
+    printf("==================================\n");
+
+
+    /*EXPLICATION DES REGLES*/
+    /*RULES EXPLANATION*/
+    printf("\n___FRANCAIS__REGLES_\n");
+    printf("-L'Administrateur donnne un mot sans espace.\n");
+    printf("-L'Utilisateur saisi une lettre; Si elle existe elle sera afficher dans la chaine,\n");
+    printf("                                une diminution de score d'une unité sinon.\n");
+    printf("-L'Utilisateur a 10 possibilités de donner une fausse lettre.\n");
+    printf("-L'utilisateur aura la possibilité de jouer tant qu'il le veut.\n");
+    printf("-L'utilisateur doit repondre par \"oui\" en repondant à une question posée par le programme;\n");
+    printf("    Autres reponse sera compter comme une réponse négative.\n");
+    printf("___ENGLISH__RULES_\n");
+    printf("-The Administrator fives one single word to be guessed.\n");
+    printf("-The User will write one letter; If the letter exists in the word it will be shown inside,\n");
+    printf("                                If not, the score will be decreased by one.\n");
+    printf("-The User will have only ten allowed fails.\n");
+    printf("-The User can play as many times as he wants.\n");
+    printf("-The User Must answer the program by \"oui\" if he wants, All other answers are understood as a negative answer.\n");
+    printf("----\n");
+
+
+    /*INTERACTION*/
+    printf("\nOn commence ? _ Can We Start ?\n");
+    printf("\"oui\" ou/or \"non\": _");
+    scanf("%s", rep);
+    while((getchar() != '\n') && (getchar() != EOF));
+    if(FORMAT(rep) == 0)                                //Verification de la Réponse_ Answer Verification
+        exit(0);
+
+
+    /*DEBUT DES MANCHES*/
+    /*HANDLES STARTING*/
+    int i=0;                                            //Compteur de Numéro de Manche_ Handle Number Counter
+    while(FORMAT(rep) != 0)
+    {
+
+        i++;                                            //Mise A Jour de Numero de Manche_ Handle Number Updating
+
+        /*DECLARATION DE NOMBRE DE MANCHE*/
+        /*HANDLE DECLARATION*/
+        printf("\n---------\n");
+        if (i == 1) //DIFFERENCIATION
+            printf("\n%d %cre manche_ Handle Number %d\n", i, eg, i);
+        else
+            printf("\n%d %cme manche_ Handle Number %d\n", i, eg, i);
+
+
+        int score=10, cartrouve=0, longueur=10;         //Variables de Manche_ Handle Variables
+        char *chaine=NULL;
+
+        /*CONTENU DE MANCHE*/
+        /*HANDLE CONTENT*/
+
+            /*ADMINISTRATEUR*/
+            /*ADMINISTRATOR*/
+            printf("\n____\tTRAVAIL D'ADMINISTRATEUR_ ADMINISTRATOR WORK__\n");
+
+            chaine=IMPORTCHAINE();                      //Importation de la Chaine_ String Importation
+            if (chaine != NULL)                         //Verification d'Erreur_ Error Verification
+            {
+
+                longueur=(int) strlen(chaine);
+                printf("___FIN ADMIN_ ADMIN END__\n");
+
+                char *chaineInter1=NULL, *chaineInter2=NULL;                 //Initialisation de chaine_ String Initialization
+                chaineInter1=INITIALISER(longueur);
+                chaineInter2=INITIALISER(longueur);
+                printf("\n");                           //Formatage_ Formatting
+
+                if (chaineInter1 != NULL)
+                {
+
+                    /*UTILISATEUR*/
+                    /*USER*/
+                    printf("\n____\tACCES UTILISATEUR_ USER ACCESS__\n");
+                    while((score != 0) && (cartrouve != longueur))
+                    {
+
+                        caractere=LIRECARACTERE();      //Lecture de caracter_ Character Reading
+
+                        /*VERIFICATION ET AFFICHAGE*/
+                        /*VERIFICATION AND PRINTING*/
+                        verif=VERIFICATION(chaine, caractere, chaineInter1, chaineInter2, (&cartrouve));
+                        printf("Chaine en Temps r%cel_ String Actually Status : %s\n", ea, chaineInter1);
+
+                        CALSCORE(verif, (&score));      //Calcul De Score_ Score Calculation
+
+                        /*DECLARATION DU RESULTAT D'ESSAI*/
+                        /*TRY RESULT DECLARATION*/
+                        printf("Caractere Trouv%cs_ Character Found : %d\n", ea, cartrouve);
+                        printf("Score                               : %d\n", score);
+                        printf("--------\n\n");
+                    }
+                }
+                else
+                {
+                    printf("ATTENTION : PROBLEME D'INITIALISATION DE CHAINE_ WARNING : STRING INITIALIZATING PROBLEM\n");
+                    exit(0);
+                }
+            }
+            else
+            {
+                printf("ATTENTION : PROBLEME D'IMPORTATION DE CHAINE_ WARNING : STRING IMPORTATION PROBLEM\n");
+                exit(0);
+            }
+
+
+        /*DECLARATION DU RESULTAT MANCHE*/
+        /*HANDLE RESULT DECLARATION*/
+        if (score)
+            printf("BRAVO !!_ WELL DONE !!\n");
+        else
+            printf("PERDU !!_ GO HOME YOU'RE DRUNK!!\n");
+
+
+        /*REPETITION*/
+        printf("MANCHE FINIE_ HANDLE FINISHED\n");
+        printf("Chaine de la Manche_ Handle String : %s\n", chaine);
+        printf("\nAutre Manche ?_ Play Again ?\n");
+        printf("\"oui\" ou/or \"non\": _");
+        scanf("%s", rep);
+
+        while((getchar() != '\n') && (getchar() != EOF));           //Vider le Buffer_ Buffer Cleaning
+        printf("\n");
+    }
+
+    return 0;
+}
+
+
+
+
+/*DEFINITION DE FONCTIONS*/
+/*FUNCTION DEFINITION*/
+
+int FORMAT(char *chaine)
+{
+    /*DOC_STRING DE FORMAT
+    __FRANCAIS_
+    ---------------------------
+    PARAMETRES     : -chaine: pointeur de caractere.
+    RETOUR         : - 1: si chaine est egale a " oui" (sans respect de case).
+                     - 0: sinon
+    FONCTIONNEMENT : 1- Enleve tous les caractères egaux à '\n' et ' '.
+                     2- Mets toute la chaine résultante en majuscule.
+                     3- Compare à "OUI" et retourne le resultat.
+    ---------------------------
+    __ENGLISH_
+    ---------------------------
+    PARAMETERS     : -chaine: Character Pointer.
+    RETURN         : - 1: if chaine is equal to "oui" (case not respected).
+                     - 0: else.
+    OPERATION      : 1- Removes all '\n' and ' ' characters.
+                     2- Upper the case of chaine.
+                     3- Compare to "OUI" string and returns the result.
+    ---------------------------
+    */
+
+    /*DECLARATION DE VARIABLES LOCALES*/
+    /*LOCAL VARIABLES DECLARATION*/
+    char *chaineInter;
+    int i, longueur=0;
+
+    chaineInter=(char*)malloc((strlen(chaine))*sizeof(char));       //Allocation de l'espace pour chaineInter_ Space Allocation for chaineInter
+    for(i=0;i<((int)strlen(chaine));i++)
+    {
+        if ((*(chaine +i) != '\n') && (*(chaine + i) != '\40'))
+            {
+                *(chaineInter + i)= toupper(*(chaine +i));          //Insertion de caractères_ Character Insertion
+                longueur++;
+            }
+    }
+    *(chaineInter +longueur)='\0';                                  //Caractère de fin de chaine_ End-Character
+
+    /*COMPARAISON*/
+    /*COMPARISON*/
+    if (!strcmp(chaineInter, "OUI"))
+        return 1;       // IF TRUE
+
+    return 0;           // IF FALSE
+}
+
+char* IMPORTCHAINE()
+{
+    /*DOC_STRING DE IMPORTACHAINE
+    __FRANCAIS_
+    ---------------------------
+    PARAMETRES     : <Aucun>
+    RETOUR         : - Pointeur sur chaine
+    FONCTIONNEMENT : 1- Lit une chaine.
+                     2- Lève la chaine lu au majuscule.
+                     3- Retourne le pointeur sur la chaine.
+    ---------------------------
+    __ENGLISH_
+    ---------------------------
+    PARAMETERS     : <None>
+    RETURN         : - String Pointer
+    OPERATION      : 1- Read String.
+                     2- Upper the case of the String.
+                     3- Return String pointer.
+    ---------------------------
+    */
+
+    /*DECLARATION DE VARIABLES LOCALES*/
+    /*LOCAL VARIABLES DECLARATION*/
+    char chaineInter[20];
+    char *chaine=NULL;
+    int i=0;
+
+    /*LECTURE D'UNE CHAINE*/
+    /*STRING READING*/
+    printf("Donnez la chaine (pas plus que 19 caractere_ not more than 19 characters) : _");
+    scanf("%s", chaineInter);
+    printf("\n");
+
+    while((getchar() != '\n') && (getchar() != EOF));               //Vider le Buffer_ Buffer Cleaning
+
+    chaine=(char*)malloc((strlen(chaineInter)+1)*sizeof(char));     //Allocation d'espace_ Memory Allocation
+    if (chaine != NULL)
+    {
+        for(i=0;i<(strlen(chaineInter));i++)
+            *(chaine + i)= toupper(*(chaineInter + i));
+        *(chaine + strlen(chaineInter))='\0';
+    }
+
+    return chaine;      //Retour_ Return
+}
+
+char LIRECARACTERE()
+{
+    /*DOC_STRING DE LIRECARACTERE
+    __FRANCAIS_
+    ---------------------------
+    PARAMETRES     : <Auncun>
+    RETOUR         : - Caractere: Ecrit par l'utilisateur.
+    FONCTIONNEMENT : 1- Lit le premier caractère saisi.
+                     2- Vide le buffer.
+    ---------------------------
+    __ENGLISH_
+    ---------------------------
+    PARAMETERS     : <None>
+    RETURN         : - Character: Written by the user.
+    OPERATION      : 1- Read the first Character written.
+                     2- Clean the Buffer.
+    ---------------------------
+    */
+
+    /*DECLARATION DE VARIABLES LOCALES*/
+    /*LOCAL VARIABLES DECLARATION*/
+    char caractere;
+
+    printf("Donnez un caract%cre :_", eg);
+    caractere=getchar();
+
+    while((getchar() != '\n') && (getchar() != EOF));           //Vide le Buffer_ Buffer Cleaning
+    caractere=toupper(caractere);
+
+    return caractere;       //Retour_ Return
+}
+
+char* INITIALISER(int taille)
+{
+    /*DOC_STRING DE INITIALISER
+    __FRANCAIS_
+    ---------------------------
+    PARAMETRES     : -taille : taille de la chaine à initialiser.
+    RETOUR         : -Pointeur sur chaine.
+    FONCTIONNEMENT : <Simple>
+    ---------------------------
+    __ENGLISH_
+    ---------------------------
+    PARAMETERS     : -taille : Length of the String to initialize.
+    RETURN         : -String Pointer.
+    OPERATION      : <Simple>
+    ---------------------------
+    */
+
+    /*DECLARATION DE VARIABLES LOCALES*/
+    /*LOCAL VARIABLES DECLARATION*/
+    char *chaineInter=NULL;
+    int i;
+
+    chaineInter=(char*)malloc(taille*sizeof(char));
+    if (chaineInter != NULL)
+    {
+        for(i=0;i<taille;i++)
+            *(chaineInter + i)='*';
+        *(chaineInter + taille)='\0';
+    }
+
+    return chaineInter;
+}
+
+int VERIFICATION(char *chaine, char caractere, char* chaineInter1, char* chaineInter2, int *cartrouve)
+{
+    /*DOC_STRING DE VERIFICATION
+    __FRANCAIS_
+    ---------------------------
+    PARAMETRES     : -chaine       : chaine de base.
+                     -chaineInter1 : chaine Intermediaire pour vérification.
+                     -chaineInter2 : chaine Intermediaire contient les lettres trouvées en une seule occurence.
+                     -caractere    : caractere saisi par l'utilisateur.
+                     -cartrouve    : nombre de caractere trouvés.
+    RETOUR         : -1 si le caractere existe dans la chaine.
+                     -0 sinon.
+    FONCTIONNEMENT : 1- Verifie l'existance du caractere dans la chaine.
+                     2- Actualise la chaine Intermédiaire.
+                     3- Retourne le resultat.
+    ---------------------------
+    __ENGLISH_
+    ---------------------------
+    PARAMETERS    : -chaine       : The Basic String.
+                    -chaineInter1 : Intermediary String for verification.
+                    -chaineInter2 : Intermediary String that contains found character within one occurence.
+                    -caractere    : The character written by the user.
+                    -cartrouve    : how many characters have been found.
+    RETURN        : -1 If the Character does exist into the String "chaine".
+                    -0 Else
+    OPERATION     : 1- Verify if the Character appears in the string "chaine".
+                    2- Updates the Intermediary String.
+                    3- Returns Result.
+    ---------------------------
+    */
+
+    /*DECLARATION DE VARIABLES LOCALES*/
+    /*LOCAL VARIABLES DECLARATION*/
+    int verif=0, i;
+
+    for(i=0;i<((int)(strlen(chaine)));i++)
+    {
+        if ((strchr(chaineInter2, caractere) == NULL) && (*(chaine + i) == caractere))      //Verification dans chaine et chaineInter2_ Verifying in chaine and Chaine Inter2
+        {
+            *(chaineInter1 + i) = caractere;
+            (*cartrouve)++;
+        }
+    }
+
+    if ((strchr(chaineInter2, caractere) == NULL))                          //Verification si c'est déjà trouvé_ Verifying if it is the first time finding
+    {
+        *(chaineInter2 + i) = caractere;
+    }
+
+    if (strchr(chaine, caractere) != NULL)                                  //Verification generale sur l'existance du caractere pour renvoyer le resultat_ Verifying Generally if the Character exists in chaine.
+        verif=1;
+
+    return verif;  //Retour_ Return
+}
+
+void CALSCORE(int verif, int *pscore)
+{
+    /*DOC_STRING DE CALSCORE
+    __FRANCAIS_
+    ---------------------------
+    PARAMETRES     : -verif  : si le caractere existe dans la chaine ou pas.
+                     -pscore : pointeur sur la variable score du programme principal.
+    RETOUR         : <Aucun>
+    FONCTIONNEMENT : <Simple>
+    ---------------------------
+    __ENGLISH_
+    ---------------------------
+    PARAMETERS     : -verif  : if the Character does exist in the main String or not.
+                     -pscore : score variable pointer.
+    RETURN         : <Aucun>
+    OPERATION      : <Simple>
+    ---------------------------
+    */
+
+    if(!verif)
+        (*pscore)--;
+
+}
