@@ -34,19 +34,16 @@ int main(int argc, char **argv)
 
 
     /*AFFICHAGE FORMEL_ FORMAL PRINTING*/
-    int *fargc=NULL;
-    char ***fargv=NULL;
-    fargc=(int*)calloc(1,sizeof(int));
-    if (fargc == NULL)
-        exit(EXIT_FAILURE);
-    fargc=&argc;
+    if (argc == 1)       //CAS D'AUCUN APPEL D'OPTION_ CASE OF NONE OPTION CALL
+    {
+        INFOPROGINT();         //APPEL AUX INFORMATIONS INTERIEURES DU PROGRAMME_ INTERNAL PROGRAM INFORMATIONS
+    }
 
-    fargv=(char***)calloc(1, sizeof(char**));
-    if (fargv == NULL)
-        exit(EXIT_FAILURE);
-    fargv=&argv;
-
-    INFOPROGEXT(fargc, fargv);
+    if ((argc == 2) && (!strcmp(argv[1],"--v")))       //CAS DE D'OPTION DE VERSION_ CASE OF VERSION OPTION
+    {
+        printf("JeuPendu_ Handled Game V0.2\n");
+        exit(EXIT_SUCCESS);
+    }
     getchar();
     printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     INFOPROGINT();
@@ -54,11 +51,6 @@ int main(int argc, char **argv)
     printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     REGLES();
     getchar();
-    free(argc);
-    fargc=NULL;
-    free(argv);
-    fargv=NULL;
-
 
     /*VARIABLES_ main*/
     char carSaisi='\0';
