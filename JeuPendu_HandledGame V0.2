@@ -1,0 +1,184 @@
+/* DOC_STRING DU PROGRAMME
+___FRANCAIS__
+==================================
+Titre       : JeuPendu
+Auteur      : MARRAKCHI Ghassen
+Référence   : ANSI C99
+Type        : Jeu
+Description : L'UTILISATEUR essaie de deviner le mot lettre par lettre
+                            avec possibilité de dix echecs
+==================================
+___ENGLISH__
+==================================
+Title       : Hanged Game
+Author      : Ghassen MARRAKCHI
+Reference   : ANSI C99
+Type        : Game
+Description : THE USER tries to guess the word letter by letter.
+                             Only ten fails are allowed.
+==================================
+*/
+
+
+/*INCLUSION*/
+#include "INC_standard.h"
+#include "UTIL_chaine.h"
+#include "UTIL_prog.h"
+#include "CONST_francais.h"
+
+
+/*PROGRAMME PRINCIPAL*/
+/*PRINCIPAL PROGRAM*/
+int main(int argc, char **argv)
+{
+
+
+    /*AFFICHAGE FORMEL_ FORMAL PRINTING*/
+    int *fargc=NULL;
+    char ***fargv=NULL;
+    fargc=(int*)calloc(1,sizeof(int));
+    if (fargc == NULL)
+        exit(EXIT_FAILURE);
+    fargc=&argc;
+
+    fargv=(char***)calloc(1, sizeof(char**));
+    if (fargv == NULL)
+        exit(EXIT_FAILURE);
+    fargv=&argv;
+
+    INFOPROGEXT(fargc, fargv);
+    getchar();
+    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    INFOPROGINT();
+    getchar();
+    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    REGLES();
+    getchar();
+    free(argc);
+    fargc=NULL;
+    free(argv);
+    fargv=NULL;
+
+
+    /*VARIABLES_ main*/
+    char carSaisi='\0';
+    char *reponse=NULL;
+    int verifCar=0;
+
+
+    /*INTERACTION_ 1*/
+    printf("\nOn commence ? _ Can We Start ?\n");
+    printf("\"oui\" ou/or \"non\": _");
+    reponse=LIRECHAINEFORMAT(reponse);      //LECTURE FORMATTEE DE LA REPONSE_ FORMATTED ANSWER READING
+    if (reponse == NULL)    //ERREUR_ ERROR
+    {
+        printf("FONCTION: MAIN/ LIGNE: %d/ ERREUR LECTURE CHAINE FORMATTE reponse\n", __LINE__);
+        exit(EXIT_FAILURE);
+    }
+
+    if(strcmp(reponse, "OUI"))                                //VERIFICATION DE LA REPONSE_ ANSWER VEIFICATION
+        exit(EXIT_SUCCESS);
+    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+
+    /*DEBUT DES MANCHES_ HANDLES STARTING*/
+    int manche=0;                                            //COMPTEUR DE MANCHE_ HANDLE NUMBER COUNTER
+    while(!strcmp(reponse, "OUI"))
+    {
+
+        ++manche;                                            //MISE A JOUR DE NUMERO DE MANCHE_ HANDLE NUMBER UPDATING
+
+
+        /*DECLARATION DE NOMBRE DE MANCHE_ HANDLE DECLARATION*/
+        printf("\n---------\n");
+        if (manche == 1) //DIFFERENCIATION
+            printf("\n%d %cre manche_ Handle Number %d\n", manche, eg, manche);
+        else
+            printf("\n%d %cme manche_ Handle Number %d\n", manche, eg, manche);
+
+
+        /*VARIABLES_ MAIN_ MANCHE_HANDLE*/
+        int score=10, carTrouve=0, longueur=10;
+        char *chaineRecherche=NULL;
+
+
+        /*CONTENU DE MANCHE_ HANDLE CONTENT*/
+
+            chaineRecherche=IMPORTCHAINE();                      //IMPORTATION DE LA CHAINE A CHERCHER_ STRING TO GUESS IMPORTATION
+            if (chaineRecherche == NULL)        //ERREUR_ ERROR
+            {
+                printf("FONCTION: MAIN/ LIGNE: %d/ ERREUR D'ALLOCATION DE chaineRecherche\n", __LINE__);
+                exit(EXIT_FAILURE);
+            }
+
+            longueur=strlen(chaineRecherche);
+            printf("Vous avez %d caract%cres %c trouver! BONNE CHANCE!\n", longueur, eg, aa);
+            printf("\n");
+
+            char *chaineInter=NULL;                 //INITIALISATION DE CHAINE INTERMEDIARE_ INTERMEDIARY STRING INITIALIZATION
+            chaineInter=INITIALISER(longueur);
+            if (chaineInter == NULL)        //ERREUR_ ERROR
+            {
+                printf("FONCTION: MAIN/ LIGNE: %d/ ERREUR D'ALLOCATION DE chaineInter\n", __LINE__);
+                exit(EXIT_FAILURE);
+            }
+
+
+            while((score != 0) && (carTrouve != longueur))
+            {
+
+                carSaisi=LIRECARACTERE();       //LECTURE D'UN SEUL CARACTERE_ ONE CHARACTER READING
+
+
+                /*VERIFICATION ET AFFICHAGE_ VERIFICATION AND PRINTING*/
+                verifCar=VERIFICATION(chaineRecherche, carSaisi, chaineInter, (&carTrouve));
+                printf("Chaine en Temps r%cel_ String Actually Status : %s\n", ea, chaineInter);
+
+                if(!verifCar)
+                    score--;        //CALCUL DE SCORE_ SCORE CALCULATION
+
+                /*DECLARATION DU RESULTAT D'ESSAI_ TRY RESULT DECLARATION*/
+                printf("Caractere Trouv%cs_ Character Found : %d\n", ea, carTrouve);
+                printf("Score                               : %d\n", score);
+                printf("--------\n\n");
+            }
+
+            /*NETTOYAGE DE MEMOIRE DE MANCHE_ HANDLE MEMORY CLEANING_ 1*/
+            free(chaineInter);
+            chaineInter=NULL;
+
+
+        /*DECLARATION DU RESULTAT MANCHE_ HANDLE RESULT DECLARATION*/
+        if (score)
+            printf("BRAVO !!_ WELL DONE !!\n");
+        else
+            printf("PERDU !!_ YOU LOSE!!\n");
+
+
+        /*REPETITION*/
+        free(reponse);      //NETTOYAGE DE MEMOIRE DE REPONSE_ ANSWER MEMORY CLEANING
+        reponse=NULL;
+        printf("MANCHE FINIE_ HANDLE FINISHED\n");
+        printf("Chaine de la Manche_ Handle String : %s\n", chaineRecherche);
+        printf("\nAutre Manche ?_ Play Again ?\n");
+        printf("\"oui\" ou/or \"non\": _");
+
+        reponse=LIRECHAINEFORMAT(reponse);      //LECTURE DE REPONSE FORMATTEE_ FORMATTED ANSWER
+        if (reponse == NULL)    //ERREUR_ ERROR
+        {
+            printf("REPONSE RETOURNEE NULLE \n");
+            exit(EXIT_FAILURE);
+        }
+
+        while((getchar() != '\n') && (getchar() != EOF));           //VIDER LE BUFFER_ BUFFER CLEANING
+        printf("\n");
+
+        /*NETTOYAGE DE MEMOIRE DE MANCHE_ HANDLE MEMORY CLEANING_ 2*/
+        free(chaineRecherche);
+        chaineRecherche=NULL;
+    }
+
+    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    printf("Merci d'avoir jou%c %c notre jeu, Au revoir!\n", ea, aa);
+    printf("Thank you for playing our game, See You!");
+    return EXIT_SUCCESS;
+}
