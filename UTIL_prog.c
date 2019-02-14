@@ -6,7 +6,7 @@ Titre       : Utilitaires
 Auteur      : MARRAKCHI Ghassen
 Référence   : ANSI C99
 Type        : Jeu
-Description : (INFOPROGINT, INFOPROGINT, REGLES)
+Description : (INFOPROGINT, REGLES)
 ==================================
 ___ENGLISH__
 ==================================
@@ -14,7 +14,7 @@ Title       : Utilities
 Author      : Ghassen MARRAKCHI
 Reference   : ANSI C99
 Type        : Game
-Description : (INFOPROGINT? INFOPROGINT, REGLES)
+Description : (INFOPROGINT, REGLES)
 ==================================
 */
 
@@ -59,36 +59,6 @@ void INFOPROGINT(void)
     printf("Description : THE USER tries to guess the word letter by letter.\n\t\t\
            Only ten fails are allowed.\n");
     printf("==================================\n");
-}
-
-void INFOPROGEXT(int *fargc, char*** fargv)
-{
-    /*DOC_STRING DE INFOPROGEXT
-    __FRANCAIS_
-    ---------------------------
-    PARAMETRES     : - fargc: pointeur sur argc.
-                     - fargv: pointeur sur tableau de chaine de caractères.
-    RETOUR         : <Aucun>
-    FONCTIONNEMENT : Affiche les informations à l'externe du programme.
-    ---------------------------
-    __ENGLISH_
-    ---------------------------
-    PARAMETERS     : - fargc: argc pointer.
-                     - fargv: string array pointer.
-    RETURN         : <None>
-    OPERATION      : Shows all the program informations.
-    ---------------------------
-    */
-
-    if ( *fargc == 1)       //CAS D'AUCUN APPEL D'OPTION_ CASE OF NONE OPTION CALL
-    {
-        INFOPROGINT();          //APPEL AUX INFORMATIONS INTERIEURES DU PROGRAMME_ INTERNAL PROGRAM INFORMATIONS
-    }
-
-    if ((*fargc == 2) && (!strcmp(**fargv[1],"--v")))       //CAS DE D'OPTION DE VERSION_ CASE OF VERSION OPTION
-    {
-        printf("JeuPendu_ Handled Game V0.2\n");
-    }
 }
 
 void REGLES(void)
